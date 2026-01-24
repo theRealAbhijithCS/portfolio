@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* Force Tailwind to use class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@property --bg-color-1 {
+  syntax: '<color>';
+  initial-value: #302b63;
+  inherits: true;
+}
+
+@property --bg-color-2 {
+  syntax: '<color>';
+  initial-value: #00bf8f;
+  inherits: true;
+}
+
+@property --bg-color-3 {
+  syntax: '<color>';
+  initial-value: #1CD8D2;
+  inherits: true;
+}
+
+/* Hide scrollbar for all browsers */
+* {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+
+/* --- VIEW TRANSITION API (Circular Reveal) --- */
+::view-transition-group(root) {
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.85, 0, 0.15, 1);
+  will-change: clip-path;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+  opacity: 1;
+  will-change: clip-path;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 999;
+  animation: reveal-circular 0.8s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes reveal-circular {
+  from {
+    clip-path: circle(0% at 95% 5%);
+  }
+
+  to {
+    clip-path: circle(150% at 95% 5%);
+  }
+}
+
+/* Fallback for browsers without View Transition support */
+.theme-fade-enter {
+  opacity: 0;
+}
+
+.theme-fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in-out;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradientBG 10s ease infinite;
+}
+
+@layer base {
+  :root {
+    /* Light Mode (Pastel Premium) */
+    --bg-color-1: #c471ed;
+    --bg-color-2: #f64f59;
+    --bg-color-3: #12c2e9;
+  }
+
+  /* Dark Mode (Original) */
+  :root.dark {
+    --bg-color-1: #302b63;
+    --bg-color-2: #00bf8f;
+    --bg-color-3: #1CD8D2;
+  }
+}
+
+@layer utilities {
+  .animated-gradient {
+    background: linear-gradient(-45deg, var(--bg-color-1), var(--bg-color-2), var(--bg-color-3));
+    background-size: 400% 400%;
+    animation: gradientShift 12s ease infinite;
+  }
+
+  @keyframes gradientShift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+/* Delay utilities for staggered animations */
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
+.delay-400 {
+  transition-delay: 400ms;
+}
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.floating-card {
+  animation: floating 4s ease-in-out infinite;
+}
+
+
+
+@media (max-width: 640px) {
+  body>*:not(#contact):not(footer) {
+    overflow-x: clip;
+  }
+}
