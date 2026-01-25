@@ -12,18 +12,23 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
   
-  // State to track if the section is in view
+  // State to track if the section has been seen
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
-  // Intersection Observer to trigger animation on scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Toggle visibility state based on whether section is in view
-        setIsVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          // Optimization: Stop observing once animation triggers to save mobile resources
+          if (sectionRef.current) observer.unobserve(sectionRef.current);
+        }
       },
-      { threshold: 0.2 } // Trigger when 20% of the section is visible
+      { 
+        threshold: 0.1, // Lower threshold for faster trigger on mobile
+        rootMargin: "0px 0px -50px 0px" // Starts animation slightly before it enters fully
+      }
     );
 
     if (sectionRef.current) {
@@ -75,21 +80,25 @@ export default function Contact() {
       ref={sectionRef}
       className="w-full min-h-screen relative bg-gray-50 dark:bg-black overflow-hidden text-gray-900 dark:text-white py-20 px-6 md:px-20 flex flex-col items-center justify-center transition-colors duration-500"
     >
+      {/* Optimization Tip: Ensure your ParticlesBackground component 
+          is memoized or reduces count on mobile screens */}
       <ParticlesBackground />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
         
         {/* Left Image Section */}
-        <div className={`w-full md:w-1/2 flex justify-center items-center ${isVisible ? 'animate-entry-left' : 'opacity-0'}`}>
+        <div className={`w-full md:w-1/2 flex justify-center items-center transition-opacity duration-300 ${isVisible ? 'animate-entry-left' : 'opacity-0'}`}>
           <img
             src={Astra}
             alt="Contact"
+            loading="lazy"
+            decoding="async"
             className="w-60 md:w-140 max-w-full h-auto object-contain animate-float"
           />
         </div>
 
         {/* Right Side Contact Form */}
-        <div className={`w-full md:w-1/2 bg-white/50 dark:bg-white/5 p-6 md:p-8 rounded-2xl shadow-lg border border-black/10 dark:border-white/10 ${isVisible ? 'animate-entry-right' : 'opacity-0'}`}>
+        <div className={`w-full md:w-1/2 bg-white/50 dark:bg-white/5 p-6 md:p-8 rounded-2xl shadow-lg border border-black/10 dark:border-white/10 transition-opacity duration-300 ${isVisible ? 'animate-entry-right' : 'opacity-0'}`}>
           <h2 className="text-3xl font-bold mb-6 text-center md:text-left">Let’s Work Together</h2>
 
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -158,42 +167,44 @@ export default function Contact() {
       <style jsx>{`
         /* Mobile: Slide up and fade in */
         @keyframes entryMobile {
-          from { opacity: 0; transform: translateY(40px); }
+          from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
 
         /* Desktop: Slide from left */
         @keyframes entryLeftDesktop {
-          from { opacity: 0; transform: translateX(-100px); }
+          from { opacity: 0; transform: translateX(-50px); }
           to { opacity: 1; transform: translateX(0); }
         }
 
         /* Desktop: Slide from right */
         @keyframes entryRightDesktop {
-          from { opacity: 0; transform: translateX(100px); }
+          from { opacity: 0; transform: translateX(50px); }
           to { opacity: 1; transform: translateX(0); }
         }
         
         @keyframes float {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
+          50% { transform: translateY(-10px); }
         }
 
         .animate-entry-left, .animate-entry-right {
-          animation: entryMobile 0.8s ease-out forwards;
+          animation: entryMobile 0.6s ease-out forwards;
+          will-change: transform, opacity; /* Forces GPU acceleration */
         }
 
         @media (min-width: 768px) {
           .animate-entry-left {
-            animation: entryLeftDesktop 0.8s ease-out forwards;
+            animation: entryLeftDesktop 0.7s ease-out forwards;
           }
           .animate-entry-right {
-            animation: entryRightDesktop 0.8s ease-out forwards;
+            animation: entryRightDesktop 0.7s ease-out forwards;
           }
         }
 
         .animate-float {
-          animation: float 3s ease-in-out infinite;
+          animation: float 4s ease-in-out infinite;
+          will-change: transform;
         }
       `}</style>
     </section>
