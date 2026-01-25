@@ -32,9 +32,8 @@ export default function IntroAnimation({ onFinish }) {
   useEffect(() => {
     let greetingTimer;
 
-    // Animation Config
-    const duration = 0.25; // Snappier duration to prevent overlap
-    const interval = 350; // More breathing room
+    const duration = 0.25;
+    const interval = 350;
 
     const animProps = {
       opacity: 1,
@@ -45,6 +44,7 @@ export default function IntroAnimation({ onFinish }) {
       filter: "blur(0px)",
       overwrite: "auto"
     };
+    
     const initialProps = {
       opacity: 0,
       y: 20,
@@ -64,7 +64,6 @@ export default function IntroAnimation({ onFinish }) {
       );
       greetingTimer = setTimeout(() => setIndex(i => i + 1), interval);
     } else {
-      // Last greeting
       gsap.fromTo(greetingRef.current, initialProps, { ...animProps, duration: 0.4 });
       gsap.fromTo(langRef.current,
         { opacity: 0, y: 10 },
@@ -76,7 +75,6 @@ export default function IntroAnimation({ onFinish }) {
           onComplete: () => onFinish && onFinish(),
         });
 
-        // The "Great Departure"
         tl.to([greetingRef.current, langRef.current], {
           duration: 0.6,
           opacity: 0,
@@ -101,17 +99,17 @@ export default function IntroAnimation({ onFinish }) {
     }
 
     return () => clearTimeout(greetingTimer);
-  }, [index, onFinish]);
+  }, [index, onFinish, greetings.length]);
 
-  // Theme-based colors
   const isDark = theme === "dark";
   const fillColor = isDark ? "#000000" : "#f9fafb";
 
   return (
     <div
       ref={overlayRef}
-      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden pointer-events-none transition-colors duration-700 ${isDark ? "bg-black" : "bg-gray-50"
-        }`}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden pointer-events-none transition-colors duration-700 ${
+        isDark ? "bg-black" : "bg-gray-50"
+      }`}
     >
       {/* Animated Grid Background */}
       <div className="absolute inset-0 opacity-20">
@@ -142,13 +140,14 @@ export default function IntroAnimation({ onFinish }) {
 
       {/* Main Content */}
       <div className="relative z-20 flex flex-col items-center gap-2 md:gap-4 px-4">
-        {/* Greeting Text */}
+        {/* Greeting Text - Added py-2 and leading-tight to prevent clipping */}
         <h1
           ref={greetingRef}
-          className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-center will-change-transform ${isDark
-            ? 'text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-blue-200'
-            : 'text-transparent bg-clip-text bg-gradient-to-br from-gray-900 via-purple-800 to-blue-900'
-            }`}
+          className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-center py-2 leading-tight will-change-transform ${
+            isDark
+              ? 'text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-blue-200'
+              : 'text-transparent bg-clip-text bg-gradient-to-br from-gray-900 via-purple-800 to-blue-900'
+          }`}
           style={{
             textShadow: isDark
               ? '0 0 30px rgba(139,92,246,0.3)'
@@ -161,8 +160,9 @@ export default function IntroAnimation({ onFinish }) {
         {/* Language Label */}
         <p
           ref={langRef}
-          className={`text-xs sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase will-change-transform ${isDark ? 'text-gray-400' : 'text-gray-600'
-            }`}
+          className={`text-xs sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase will-change-transform ${
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}
         >
           {greetings[index].lang}
         </p>
@@ -172,12 +172,13 @@ export default function IntroAnimation({ onFinish }) {
           {greetings.map((_, i) => (
             <div
               key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${i === index
-                ? 'w-6 md:w-8 bg-gradient-to-r from-purple-500 to-blue-500'
-                : i < index
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === index
+                  ? 'w-6 md:w-8 bg-gradient-to-r from-purple-500 to-blue-500'
+                  : i < index
                   ? 'w-1.5 bg-purple-500/30'
                   : `w-1.5 ${isDark ? 'bg-white/10' : 'bg-black/10'}`
-                }`}
+              }`}
             />
           ))}
         </div>
@@ -192,6 +193,12 @@ export default function IntroAnimation({ onFinish }) {
         <path fill={fillColor} d="M0,0 L0,900 L1440,900 L1440,0 Z" />
       </svg>
 
+      <style jsx>{`
+        @keyframes gridMove {
+          from { transform: translateY(0); }
+          to { transform: translateY(50px); }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
-import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { FaExternalLinkAlt, FaGithub, FaLaptopCode, FaArrowRight, FaRocket } from "react-icons/fa";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaGithub, FaArrowRight, FaRocket } from "react-icons/fa";
 
-// Importing project images
+// --- Importing your project images ---
 import img1 from "../assets/img1.png";
 import img2 from "../assets/img2.png";
 import img3 from "../assets/img3.png";
@@ -10,8 +10,6 @@ import photo1 from "../assets/photo1.png";
 import photo2 from "../assets/photo2.png";
 import photo3 from "../assets/photo3.png";
 
-// --- Project Data with Explicit Classes ---
-// Defining full Tailwind class strings here prevents JIT purging issues.
 const projects = [
   {
     title: "Nova Tech",
@@ -28,7 +26,6 @@ const projects = [
       bgTint: "bg-purple-500/5",
       textGradient: "dark:from-white dark:to-purple-200 from-purple-700 to-purple-900",
       iconColor: "text-purple-400",
-      buttonText: "group-hover:text-purple-700 dark:group-hover:text-purple-300",
       tagHover: "group-hover:border-purple-500/40 group-hover:text-purple-700 dark:group-hover:text-purple-200",
       gradient: "from-purple-500 to-indigo-500",
     }
@@ -48,7 +45,6 @@ const projects = [
       bgTint: "bg-cyan-500/5",
       textGradient: "dark:from-white dark:to-cyan-200 from-cyan-700 to-cyan-900",
       iconColor: "text-cyan-400",
-      buttonText: "group-hover:text-cyan-700 dark:group-hover:text-cyan-300",
       tagHover: "group-hover:border-cyan-500/40 group-hover:text-cyan-700 dark:group-hover:text-cyan-200",
       gradient: "from-cyan-500 to-blue-500",
     }
@@ -68,182 +64,105 @@ const projects = [
       bgTint: "bg-amber-500/5",
       textGradient: "dark:from-white dark:to-amber-200 from-amber-700 to-amber-900",
       iconColor: "text-amber-400",
-      buttonText: "group-hover:text-amber-700 dark:group-hover:text-amber-300",
       tagHover: "group-hover:border-amber-500/40 group-hover:text-amber-700 dark:group-hover:text-amber-200",
       gradient: "from-amber-500 to-orange-500",
     }
   },
 ];
 
-const ActionButton = ({ children, className = "", href }) => {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`relative overflow-hidden inline-flex items-center justify-center ${className}`}
-    >
-      {children}
-    </motion.a>
-  );
-};
+const ActionButton = ({ children, className = "", href }) => (
+  <motion.a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.98 }}
+    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    className={`relative overflow-hidden inline-flex items-center justify-center ${className}`}
+  >
+    {children}
+  </motion.a>
+);
 
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index, isMobileView = false }) => {
   const [isHovered, setIsHovered] = useState(false);
-
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
   return (
     <motion.div
-      initial={isMobile ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      whileInView={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: isMobile ? "0px" : "-50px" }}
-      transition={isMobile ? { duration: 0 } : {
-        duration: 0.6,
-        delay: index * 0.15
-      }}
-      className="group relative will-change-transform"
-      onMouseEnter={() => {
-        if (!isMobile) setIsHovered(true);
-      }}
+      initial={isMobileView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      whileInView={isMobileView ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: isMobileView ? "0px" : "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      className="group relative h-full"
+      onMouseEnter={() => !isMobileView && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Desktop Layout - Horizontal */}
-      <div className="hidden lg:grid lg:grid-cols-2 gap-8 items-center">
-        {/* Image Section */}
+      {/* --- DESKTOP LAYOUT --- */}
+      <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
         <motion.div
-          className="relative overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#1a1a1a] h-[400px]"
+          className="relative overflow-hidden rounded-3xl bg-gray-200 dark:bg-[#1a1a1a] h-[450px] shadow-2xl"
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Status Badge */}
-          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-sm border border-black/10 dark:border-white/10 text-xs font-semibold text-gray-900 dark:text-white shadow-lg">
-            <span className="relative flex h-2 w-2">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-gradient-to-r ${project.css.gradient}`}></span>
-              <span className={`relative inline-flex rounded-full h-2 w-2 bg-gradient-to-r ${project.css.gradient}`}></span>
-            </span>
+          <div className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-sm border border-black/10 dark:border-white/10 text-xs font-bold text-gray-900 dark:text-white shadow-lg">
+            <span className={`h-2 w-2 rounded-full animate-ping bg-gradient-to-r ${project.css.gradient}`}></span>
             {project.status}
           </div>
-
-          {/* Image */}
-          <div className="w-full h-full relative overflow-hidden">
-            <motion.img
-              src={project.desktopParams}
-              alt={project.title}
-              className="absolute top-0 left-0 w-full h-full object-cover"
-              animate={{ scale: isHovered ? 1.05 : 1 }}
-              transition={{ duration: 0.6 }}
-            />
-          </div>
-
-          {/* Gradient Overlay */}
+          <motion.img
+            src={project.desktopParams}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            animate={{ scale: isHovered ? 1.05 : 1 }}
+            transition={{ duration: 0.6 }}
+          />
           <div className={`absolute inset-0 bg-gradient-to-br ${project.css.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
         </motion.div>
 
-        {/* Content Section */}
-        <div className="flex flex-col justify-center space-y-6">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-2 mb-4"
-            >
-              <div className={`h-1 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
-              <span className={`text-xs font-bold tracking-widest uppercase ${project.css.iconColor}`}>
-                Featured Project
-              </span>
-            </motion.div>
-
-            <h3 className={`text-4xl font-black text-gray-900 dark:text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${project.css.textGradient} transition-all duration-300`}>
-              {project.title}
-            </h3>
-
-            <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400 mb-6">
-              {project.description}
-            </p>
-
-            <div className="flex flex-wrap gap-3 mb-8">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`px-4 py-2 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-mono text-gray-700 dark:text-gray-300 transition-all hover:scale-105 ${project.css.tagHover}`}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        <div className="flex flex-col space-y-6">
+          <div className="flex items-center gap-2">
+            <div className={`h-1 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
+            <span className={`text-xs font-bold tracking-widest uppercase ${project.css.iconColor}`}>Featured Project</span>
           </div>
-
-          <ActionButton
-            href={project.link}
-            className={`inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r ${project.css.gradient} text-white font-bold text-sm shadow-lg hover:shadow-xl w-fit`}
-          >
-            <FaRocket className="text-lg" />
-            Launch Project
-            <FaArrowRight className="text-sm" />
-          </ActionButton>
-        </div>
-      </div>
-
-      {/* Mobile/Tablet Layout - Modern Premium Card (CPU Optimized) */}
-      <div className="lg:hidden relative overflow-hidden rounded-3xl bg-white dark:bg-[#0f172a] border border-black/5 dark:border-white/10 shadow-xl transform-gpu">
-        {/* Mobile Image Area - Optimized for "Fill" look */}
-        <div className="relative w-full aspect-[4/5] overflow-hidden">
-          <img
-            src={project.mobileParams}
-            alt={project.title}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          {/* Subtle Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-
-          {/* Status Badge */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-sm border border-black/5 dark:border-white/10 text-[10px] font-bold uppercase tracking-wider text-gray-900 dark:text-white shadow-sm">
-            <span className={`h-1.5 w-1.5 rounded-full animate-pulse bg-gradient-to-r ${project.css.gradient}`}></span>
-            {project.status}
-          </div>
-        </div>
-
-        {/* Text Area - High Precision Typography */}
-        <div className="p-8 space-y-5">
-          <div className="space-y-2">
-            <h3 className="text-3xl font-black text-gray-900 dark:text-white leading-tight">
-              {project.title}
-            </h3>
-            <div className={`h-1.5 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
-          </div>
-
-          <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 font-medium">
-            {project.description}
-          </p>
-
-          {/* Tags - Optimized for tap targets */}
-          <div className="flex flex-wrap gap-2 pt-2">
+          {/* FIXED: Added py-1 to prevent title clipping */}
+          <h3 className={`text-5xl font-black text-gray-900 dark:text-white py-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r ${project.css.textGradient} transition-all duration-300`}>
+            {project.title}
+          </h3>
+          <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">{project.description}</p>
+          <div className="flex flex-wrap gap-3">
             {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1.5 rounded-lg bg-gray-100/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs font-bold font-mono text-gray-700 dark:text-gray-300"
-              >
+              <span key={tag} className={`px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-mono text-gray-700 dark:text-gray-300 ${project.css.tagHover} transition-all`}>
                 {tag}
               </span>
             ))}
           </div>
+          <ActionButton href={project.link} className={`px-8 py-4 rounded-full bg-gradient-to-r ${project.css.gradient} text-white font-bold text-sm shadow-xl w-fit gap-3 mt-4`}>
+            <FaRocket /> Launch Project <FaArrowRight />
+          </ActionButton>
+        </div>
+      </div>
 
-          <div className="pt-6">
-            <ActionButton
-              href={project.link}
-              className={`flex items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r ${project.css.gradient} text-white font-black text-sm shadow-lg hover:shadow-xl w-full justify-center`}
-            >
-              <FaRocket className="text-lg" />
-              LAUNCH PROJECT
-              <FaArrowRight className="text-sm" />
-            </ActionButton>
+      {/* --- MOBILE LAYOUT --- */}
+      <div className="lg:hidden relative flex flex-col h-full">
+        <div className="relative w-full aspect-[4/5] overflow-hidden rounded-3xl shadow-xl">
+          <img src={project.mobileParams} alt={project.title} className="w-full h-full object-cover" />
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-sm text-[10px] font-bold uppercase text-gray-900 dark:text-white">
+            <span className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${project.css.gradient}`}></span>
+            {project.status}
           </div>
+        </div>
+        <div className="py-6 flex flex-col flex-1">
+          {/* FIXED: Added py-1 here too */}
+          <h3 className="text-3xl font-black text-gray-900 dark:text-white py-1 mb-2">{project.title}</h3>
+          <div className={`h-1 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full mb-4`}></div>
+          <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-6">{project.description}</p>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {project.tags.map(tag => (
+              <span key={tag} className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs font-medium text-gray-700 dark:text-gray-300">{tag}</span>
+            ))}
+          </div>
+          <ActionButton href={project.link} className={`px-6 py-4 rounded-2xl bg-gradient-to-r ${project.css.gradient} text-white font-bold text-sm shadow-lg w-full justify-center mt-auto gap-3`}>
+            <FaRocket /> VIEW PROJECT <FaArrowRight />
+          </ActionButton>
         </div>
       </div>
     </motion.div>
@@ -251,68 +170,106 @@ const ProjectCard = ({ project, index }) => {
 };
 
 export default function Projects() {
+  const [[page, direction], setPage] = useState([0, 0]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const activeIndex = Math.abs(page % projects.length);
+
+  const paginate = (newDirection) => {
+    const nextIndex = activeIndex + newDirection;
+    if (nextIndex >= 0 && nextIndex < projects.length) {
+      setPage([page + newDirection, newDirection]);
+    }
+  };
+
   return (
-    <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-16 sm:py-32 overflow-x-clip transition-colors duration-500">
+    <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-16 sm:py-32 overflow-hidden transition-colors duration-500">
+      
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 blur-[130px] rounded-full pointer-events-none" />
 
-      {/* Noise Texture - Faded on mobile to save CPU */}
-      <div className="absolute inset-0 z-0 opacity-[0.02] sm:opacity-[0.04] pointer-events-none"
-        style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}
-      />
-
-      {/* Background Gradients - Reduced for mobile performance */}
-      <div className="absolute top-0 right-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-purple-600/5 sm:bg-purple-600/10 blur-[80px] sm:blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 left-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-blue-600/5 sm:bg-blue-600/10 blur-[80px] sm:blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
+        
         {/* Header */}
-        <div className="mb-12 sm:mb-20 flex flex-col items-start max-w-2xl mx-auto md:mx-0">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-3 mb-4 sm:mb-6"
-          >
-            <span className="flex h-3 w-3 rounded-full bg-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.6)]"></span>
-            <span className="text-xs sm:text-sm font-semibold text-purple-600 dark:text-purple-200 tracking-widest uppercase">My Portfolio</span>
+        <div className="mb-20 max-w-3xl">
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-3 mb-6">
+            <span className="h-3 w-3 rounded-full bg-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.6)]"></span>
+            <span className="text-sm font-semibold text-purple-600 dark:text-purple-200 tracking-widest uppercase">Portfolio</span>
           </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-[1]"
+          
+          {/* FIXED: Changed leading-[0.9] to leading-[1.1] and added py-2 */}
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }} 
+            whileInView={{ opacity: 1, y: 0 }} 
+            viewport={{ once: true }} 
+            className="text-4xl sm:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] py-2 mb-8"
           >
-            BUILDING <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 via-gray-700 to-gray-900 dark:from-gray-200 dark:via-gray-400 dark:to-gray-500">DIGITAL PRODUCTS.</span>
+            CRAFTING <br /> 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-600 dark:from-gray-300 dark:to-gray-500">
+              UNIQUE EXPERIENCES.
+            </span>
           </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="mt-6 sm:mt-8 text-base sm:text-lg text-gray-600 dark:text-gray-400 font-normal max-w-xl leading-relaxed"
-          >
-            Crafting interfaces that combine aesthetic excellence with robust engineering. Explore selected works below.
-          </motion.p>
         </div>
 
-        {/* Projects List */}
-        <div className="space-y-24">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
-        </div>
+        {isMobile ? (
+          <div className="relative h-[750px] flex flex-col items-center">
+            <div className="relative w-full h-full flex justify-center items-center touch-none">
+              <AnimatePresence initial={false} custom={direction}>
+                <motion.div
+                  key={page}
+                  custom={direction}
+                  variants={{
+                    enter: (d) => ({ x: d > 0 ? 400 : -400, opacity: 0, scale: 0.9 }),
+                    center: { zIndex: 1, x: 0, opacity: 1, scale: 1 },
+                    exit: (d) => ({ zIndex: 0, x: d < 0 ? 400 : -400, opacity: 0, scale: 0.9 })
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ x: { type: "spring", stiffness: 260, damping: 25 }, opacity: { duration: 0.2 } }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = Math.abs(offset.x) > 50;
+                    if (swipe && offset.x > 0) paginate(-1);
+                    else if (swipe && offset.x < 0) paginate(1);
+                  }}
+                  className="absolute w-full max-w-[360px]"
+                >
+                  <ProjectCard project={projects[activeIndex]} isMobileView={true} />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            
+            <div className="flex gap-4 mt-8">
+              {projects.map((_, i) => (
+                <button 
+                  key={i} 
+                  onClick={() => setPage([i, i > activeIndex ? 1 : -1])} 
+                  className={`h-1.5 transition-all duration-300 rounded-full ${i === activeIndex ? "w-10 bg-purple-500" : "w-3 bg-gray-300 dark:bg-gray-700"}`} 
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-40">
+            {projects.map((project, index) => (
+              <ProjectCard key={project.title} project={project} index={index} isMobileView={false} />
+            ))}
+          </div>
+        )}
 
-        {/* Footer Link */}
-        <div className="mt-20 sm:mt-32 border-t border-black/10 dark:border-white/10 pt-8 sm:pt-12 flex justify-center">
-          <ActionButton
-            href="https://github.com/abhijithcs200"
-            className="group flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white"
-          >
-            <FaGithub className="text-lg sm:text-xl" />
-            <span className="text-sm sm:text-base font-semibold">Explore more on GitHub</span>
+        {/* Footer */}
+        <div className="mt-40 pt-12 border-t border-black/5 dark:border-white/5 flex justify-center">
+          <ActionButton href="https://github.com/abhijithcs200" className="px-10 py-5 rounded-full bg-black dark:bg-white text-white dark:text-black font-bold gap-3">
+            <FaGithub className="text-xl" /> Explore More on GitHub
           </ActionButton>
         </div>
       </div>
