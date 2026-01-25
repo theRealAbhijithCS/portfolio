@@ -75,38 +75,15 @@ const projects = [
   },
 ];
 
-const MagneticButton = ({ children, className = "", href }) => {
-  const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
-  const mouseY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
-
-  const handleMouseMove = (e) => {
-    const isMobile = window.innerWidth < 1024;
-    if (isMobile) return;
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    const center = { x: left + width / 2, y: top + height / 2 };
-    x.set(clientX - center.x);
-    y.set(clientY - center.y);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
+const ActionButton = ({ children, className = "", href }) => {
   return (
     <motion.a
-      ref={ref}
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ x: mouseX, y: mouseY }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={`relative overflow-hidden inline-flex items-center justify-center ${className}`}
     >
       {children}
@@ -201,14 +178,14 @@ const ProjectCard = ({ project, index }) => {
             </div>
           </div>
 
-          <MagneticButton
+          <ActionButton
             href={project.link}
-            className={`inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r ${project.css.gradient} text-white font-bold text-sm shadow-lg hover:shadow-xl transition-all hover:scale-105 w-fit`}
+            className={`inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r ${project.css.gradient} text-white font-bold text-sm shadow-lg hover:shadow-xl w-fit`}
           >
             <FaRocket className="text-lg" />
             Launch Project
             <FaArrowRight className="text-sm" />
-          </MagneticButton>
+          </ActionButton>
         </div>
       </div>
 
@@ -258,14 +235,14 @@ const ProjectCard = ({ project, index }) => {
           </div>
 
           <div className="pt-6">
-            <MagneticButton
+            <ActionButton
               href={project.link}
-              className={`flex items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r ${project.css.gradient} text-white font-black text-sm shadow-lg hover:shadow-xl transition-all active:scale-95 w-full justify-center`}
+              className={`flex items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r ${project.css.gradient} text-white font-black text-sm shadow-lg hover:shadow-xl w-full justify-center`}
             >
               <FaRocket className="text-lg" />
               LAUNCH PROJECT
               <FaArrowRight className="text-sm" />
-            </MagneticButton>
+            </ActionButton>
           </div>
         </div>
       </div>
@@ -330,13 +307,13 @@ export default function Projects() {
 
         {/* Footer Link */}
         <div className="mt-20 sm:mt-32 border-t border-black/10 dark:border-white/10 pt-8 sm:pt-12 flex justify-center">
-          <MagneticButton
-            href="https://github.com/theRealAbhijithCS"
-            className="group flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white transition-all hover:scale-105"
+          <ActionButton
+            href="https://github.com/abhijithcs200"
+            className="group flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white"
           >
             <FaGithub className="text-lg sm:text-xl" />
             <span className="text-sm sm:text-base font-semibold">Explore more on GitHub</span>
-          </MagneticButton>
+          </ActionButton>
         </div>
       </div>
     </section>
