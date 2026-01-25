@@ -117,15 +117,20 @@ const MagneticButton = ({ children, className = "", href }) => {
 const ProjectCard = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
+      initial={isMobile ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      whileInView={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: isMobile ? "0px" : "-50px" }}
+      transition={isMobile ? { duration: 0 } : {
+        duration: 0.6,
+        delay: index * 0.15
+      }}
       className="group relative will-change-transform"
       onMouseEnter={() => {
-        if (window.innerWidth >= 1024) setIsHovered(true);
+        if (!isMobile) setIsHovered(true);
       }}
       onMouseLeave={() => setIsHovered(false)}
     >
