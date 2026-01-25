@@ -210,6 +210,13 @@ html {
     animation-duration: 4s !important;
     /* Slower pulses = less paint */
   }
+
+  /* Force GPU acceleration for projects cards to avoid CPU lag */
+  #projects .group {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 }
 
 @keyframes gridMove {

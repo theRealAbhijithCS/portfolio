@@ -189,8 +189,8 @@ const ProjectCard = ({ project, index }) => {
         </div>
       </div>
 
-      {/* Mobile/Tablet Layout - Modern Premium Card */}
-      <div className="lg:hidden relative overflow-hidden rounded-3xl bg-white/80 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-xl">
+      {/* Mobile/Tablet Layout - Modern Premium Card (CPU Optimized) */}
+      <div className="lg:hidden relative overflow-hidden rounded-3xl bg-white dark:bg-[#0f172a] border border-black/5 dark:border-white/10 shadow-xl transform-gpu">
         {/* Mobile Image Area - Optimized for "Fill" look */}
         <div className="relative w-full aspect-[4/5] overflow-hidden">
           <img
@@ -254,8 +254,8 @@ export default function Projects() {
   return (
     <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-16 sm:py-32 overflow-x-clip transition-colors duration-500">
 
-      {/* Noise Texture */}
-      <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none"
+      {/* Noise Texture - Faded on mobile to save CPU */}
+      <div className="absolute inset-0 z-0 opacity-[0.02] sm:opacity-[0.04] pointer-events-none"
         style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}
       />
 
