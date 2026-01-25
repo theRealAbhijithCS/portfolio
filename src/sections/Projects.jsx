@@ -84,6 +84,8 @@ const MagneticButton = ({ children, className = "", href }) => {
   const mouseY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   const handleMouseMove = (e) => {
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) return;
     const { clientX, clientY } = e;
     const { left, top, width, height } = ref.current.getBoundingClientRect();
     const center = { x: left + width / 2, y: top + height / 2 };
@@ -121,8 +123,10 @@ const ProjectCard = ({ project, index }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="group relative"
-      onMouseEnter={() => setIsHovered(true)}
+      className="group relative will-change-transform"
+      onMouseEnter={() => {
+        if (window.innerWidth >= 1024) setIsHovered(true);
+      }}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Desktop Layout - Horizontal */}
@@ -270,16 +274,16 @@ const ProjectCard = ({ project, index }) => {
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-16 sm:py-32 overflow-hidden transition-colors duration-500">
+    <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-16 sm:py-32 overflow-x-clip transition-colors duration-500">
 
       {/* Noise Texture */}
       <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none"
         style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}
       />
 
-      {/* Background Gradients */}
-      <div className="absolute top-0 right-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-purple-600/10 blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 left-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-blue-600/10 blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
+      {/* Background Gradients - Reduced for mobile performance */}
+      <div className="absolute top-0 right-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-purple-600/5 sm:bg-purple-600/10 blur-[80px] sm:blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
+      <div className="absolute bottom-0 left-0 w-[500px] sm:w-[600px] h-[500px] sm:h-[600px] bg-blue-600/5 sm:bg-blue-600/10 blur-[80px] sm:blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -326,7 +330,7 @@ export default function Projects() {
         {/* Footer Link */}
         <div className="mt-20 sm:mt-32 border-t border-black/10 dark:border-white/10 pt-8 sm:pt-12 flex justify-center">
           <MagneticButton
-            href="https://github.com/abhijithcs200"
+            href="https://github.com/theRealAbhijithCS"
             className="group flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white transition-all hover:scale-105"
           >
             <FaGithub className="text-lg sm:text-xl" />

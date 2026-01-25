@@ -2,12 +2,11 @@
 import { useEffect, useState } from "react";
 
 export default function CustomCursor() {
-  // Store mouse position (x, y) in local state
-  // By default, it starts at { x: 0, y: 0 }
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isTouch, setIsTouch] = useState(false);
 
-  // useEffect runs once when component mounts
   useEffect(() => {
+    setIsTouch('ontouchstart' in window || navigator.maxTouchPoints > 0);
     // Function to update cursor position whenever mouse moves
     const moveHandler = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
@@ -19,6 +18,8 @@ export default function CustomCursor() {
     // Cleanup → remove event listener when component unmounts
     return () => window.removeEventListener("mousemove", moveHandler);
   }, []);
+
+  if (isTouch) return null;
 
   return (
     <div

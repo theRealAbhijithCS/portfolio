@@ -126,13 +126,13 @@ export default function IntroAnimation({ onFinish }) {
       </div>
 
       {/* Gradient Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-[80px] md:blur-[120px] opacity-20 animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-[80px] md:blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-[40px] md:blur-[120px] opacity-20 animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur-[40px] md:blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
 
       {/* Glow Effect Behind Text */}
       <div
         ref={glowRef}
-        className="absolute w-[600px] h-[600px] rounded-full blur-[100px] opacity-0"
+        className="absolute w-[600px] h-[600px] rounded-full blur-[60px] md:blur-[100px] opacity-0 will-change-transform"
         style={{
           background: isDark
             ? 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(59,130,246,0.2) 50%, transparent 100%)'
@@ -145,14 +145,14 @@ export default function IntroAnimation({ onFinish }) {
         {/* Greeting Text */}
         <h1
           ref={greetingRef}
-          className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-center ${isDark
+          className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-center will-change-transform ${isDark
             ? 'text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-blue-200'
             : 'text-transparent bg-clip-text bg-gradient-to-br from-gray-900 via-purple-800 to-blue-900'
             }`}
           style={{
             textShadow: isDark
-              ? '0 0 80px rgba(139,92,246,0.5), 0 0 40px rgba(59,130,246,0.3)'
-              : '0 0 40px rgba(139,92,246,0.2)'
+              ? '0 0 30px rgba(139,92,246,0.3)'
+              : '0 0 20px rgba(139,92,246,0.1)'
           }}
         >
           {greetings[index].text}
@@ -161,7 +161,7 @@ export default function IntroAnimation({ onFinish }) {
         {/* Language Label */}
         <p
           ref={langRef}
-          className={`text-xs sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase ${isDark ? 'text-gray-400' : 'text-gray-600'
+          className={`text-xs sm:text-sm md:text-base font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase will-change-transform ${isDark ? 'text-gray-400' : 'text-gray-600'
             }`}
         >
           {greetings[index].lang}
@@ -192,17 +192,6 @@ export default function IntroAnimation({ onFinish }) {
         <path fill={fillColor} d="M0,0 L0,900 L1440,900 L1440,0 Z" />
       </svg>
 
-      {/* CSS Animation for Grid */}
-      <style jsx>{`
-        @keyframes gridMove {
-          0% {
-            transform: translate(0, 0);
-          }
-          100% {
-            transform: translate(50px, 50px);
-          }
-        }
-      `}</style>
     </div>
   );
 }

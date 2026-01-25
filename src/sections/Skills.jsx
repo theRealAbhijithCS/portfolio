@@ -28,7 +28,7 @@ export default function Skills() {
   ];
   const repeated = [...skills, ...skills]
 
-  const [dir, setDir] = useState(-1);
+  const dir = useRef(-1);
   const [active, setActive] = useState(false);
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
@@ -53,12 +53,16 @@ export default function Skills() {
   useEffect(() => {
     if (!active) return;
 
-    const onWheel = (e) => setDir(e.deltaY > 0 ? -1 : 1);
-    const onTouchStart = (e) => (touchY.current = e.touches[0].clientY);
+    const onWheel = (e) => {
+      dir.current = e.deltaY > 0 ? -1 : 1;
+    };
+    const onTouchStart = (e) => {
+      touchY.current = e.touches[0].clientY;
+    };
     const onTouchMove = (e) => {
       if (touchY.current == null) return;
       const delta = e.touches[0].clientY - touchY.current;
-      setDir(delta > 0 ? 1 : -1);
+      dir.current = delta > 0 ? 1 : -1;
       touchY.current = e.touches[0].clientY;
     };
     window.addEventListener('wheel', onWheel, { passive: true });
@@ -82,7 +86,7 @@ export default function Skills() {
     const tick = (now) => {
       const dt = (now - last) / 1000;
       last = now;
-      let next = x.get() + SPEED * dir * dt;
+      let next = x.get() + SPEED * dir.current * dt;
       const loop = trackRef.current?.scrollWidth / 2 || 0;
 
       if (loop) {
@@ -94,7 +98,7 @@ export default function Skills() {
     }
     id = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(id);
-  }, [dir, x]);
+  }, [x]);
 
 
   return (

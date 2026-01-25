@@ -21,6 +21,11 @@
   inherits: true;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 /* Hide scrollbar for all browsers */
 * {
   scrollbar-width: none;
@@ -191,5 +196,32 @@
 @media (max-width: 640px) {
   body>*:not(#contact):not(footer) {
     overflow-x: clip;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Reduce blur complexity for mobile performance */
+  [class*="blur-"] {
+    filter: blur(40px) !important;
+  }
+
+  .animate-pulse {
+    animation-duration: 4s !important;
+    /* Slower pulses = less paint */
+  }
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(50px, 50px);
   }
 }
