@@ -207,63 +207,59 @@ const ProjectCard = ({ project, index }) => {
         </div>
       </div>
 
-      {/* Mobile/Tablet Layout - Vertical Card */}
-      <div className="lg:hidden relative overflow-hidden rounded-2xl bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10">
-        {/* Mobile Image Area */}
-        <div className="relative w-full bg-gray-200 dark:bg-[#1c1c1f] pt-10 pb-6 overflow-hidden">
-          {/* Background Glow */}
-          <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-b ${project.css.gradient} to-transparent opacity-20 blur-3xl`} />
-
-          {/* Phone Bezel */}
-          <div className="relative mx-auto w-[65%] max-w-[200px] aspect-[9/18] rounded-[2rem] border-[6px] border-white dark:border-[#121212] bg-white dark:bg-[#121212] shadow-2xl overflow-hidden ring-1 ring-black/10 dark:ring-white/10">
-            <div className="w-full h-full bg-white dark:bg-black overflow-hidden relative">
-              <img
-                src={project.mobileParams}
-                alt={project.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
-            </div>
-            <div className="absolute top-0 inset-x-0 h-4 bg-white dark:bg-[#121212] flex justify-center z-20">
-              <div className="w-16 h-4 bg-gray-200 dark:bg-black rounded-b-xl" />
-            </div>
-          </div>
+      {/* Mobile/Tablet Layout - Modern Premium Card */}
+      <div className="lg:hidden relative overflow-hidden rounded-3xl bg-white/80 dark:bg-white/5 backdrop-blur-md border border-black/5 dark:border-white/10 shadow-xl">
+        {/* Mobile Image Area - Optimized for "Fill" look */}
+        <div className="relative w-full aspect-[4/5] overflow-hidden">
+          <img
+            src={project.mobileParams}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          {/* Subtle Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
           {/* Status Badge */}
-          <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/40 dark:bg-black/40 backdrop-blur border border-black/10 dark:border-white/10 text-[10px] font-medium text-gray-900 dark:text-white shadow-sm">
-            <span className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${project.css.gradient}`}></span>
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 dark:bg-black/90 backdrop-blur-sm border border-black/5 dark:border-white/10 text-[10px] font-bold uppercase tracking-wider text-gray-900 dark:text-white shadow-sm">
+            <span className={`h-1.5 w-1.5 rounded-full animate-pulse bg-gradient-to-r ${project.css.gradient}`}></span>
             {project.status}
           </div>
         </div>
 
-        {/* Text Area */}
-        <div className="p-6 space-y-4">
-          <h3 className={`text-2xl font-bold text-gray-900 dark:text-white`}>
-            {project.title}
-          </h3>
+        {/* Text Area - High Precision Typography */}
+        <div className="p-8 space-y-5">
+          <div className="space-y-2">
+            <h3 className="text-3xl font-black text-gray-900 dark:text-white leading-tight">
+              {project.title}
+            </h3>
+            <div className={`h-1.5 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
+          </div>
 
-          <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400 font-medium">
             {project.description}
           </p>
 
-          <div className="flex flex-wrap gap-2">
+          {/* Tags - Optimized for tap targets */}
+          <div className="flex flex-wrap gap-2 pt-2">
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className={`px-2.5 py-1 rounded bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-mono text-gray-700 dark:text-gray-300`}
+                className="px-3 py-1.5 rounded-lg bg-gray-100/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs font-bold font-mono text-gray-700 dark:text-gray-300"
               >
                 {tag}
               </span>
             ))}
           </div>
 
-          <div className="pt-4 border-t border-black/10 dark:border-white/10">
+          <div className="pt-6">
             <MagneticButton
               href={project.link}
-              className={`inline-flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white ${project.css.buttonText} w-full justify-center`}
+              className={`flex items-center gap-3 px-6 py-4 rounded-2xl bg-gradient-to-r ${project.css.gradient} text-white font-black text-sm shadow-lg hover:shadow-xl transition-all active:scale-95 w-full justify-center`}
             >
-              <FaRocket className={`${project.css.iconColor}`} />
-              Launch Experience
+              <FaRocket className="text-lg" />
+              LAUNCH PROJECT
+              <FaArrowRight className="text-sm" />
             </MagneticButton>
           </div>
         </div>
