@@ -219,7 +219,7 @@ export default function Projects() {
 
         {/* Footer */}
         <div className="mt-20 lg:mt-32 pt-10 border-t border-gray-200 dark:border-white/5 flex justify-center px-6">
-          <a href="https://github.com/abhijithcs200" className="px-10 py-5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold flex items-center gap-3 hover:bg-purple-600 dark:hover:bg-purple-500 hover:text-white transition-all shadow-xl">
+          <a href="https://github.com/theRealAbhijithCS" className="px-10 py-5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold flex items-center gap-3 hover:bg-purple-600 dark:hover:bg-purple-500 hover:text-white transition-all shadow-xl">
             <FaGithub className="text-xl" /> Full Project Archive
           </a>
         </div>
