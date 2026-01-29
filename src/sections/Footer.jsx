@@ -9,12 +9,6 @@ import {
   FaGithub,
 } from "react-icons/fa6";
 
-/**
- * Social media links configuration
- * - Each object represents a platform
- * - Replace `href` with your own profile links
- * - Add/remove items if you want more or fewer social platforms
- */
 const socials = [
 
   { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/abhijith-c-s-440950286/" },
@@ -22,12 +16,7 @@ const socials = [
   { Icon: FaGithub, label: "GitHub", href: "https://github.com/theRealAbhijithCS" },
 ];
 
-/**
- * Framer Motion variants for hover/tap glow effects
- * - Initial: normal state
- * - Hover: scale up, lift slightly, and glow with neon shadows
- * - Tap: slightly shrink when clicked/tapped
- */
+
 const glowVariants = {
   initial: { scale: 1, y: 0, filter: "drop-shadow(0 0 0 rgba(0,0,0,0))" },
   hover: {
