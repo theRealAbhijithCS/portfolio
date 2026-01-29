@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FaGithub, FaArrowRight, FaRocket, FaExchangeAlt, FaChevronRight } from "react-icons/fa";
+import { FaGithub, FaArrowRight, FaRocket, FaExchangeAlt, FaChevronRight, FaCodeBranch } from "react-icons/fa";
 
 // --- Images ---
 import img1 from "../assets/img1.png";
@@ -21,7 +21,6 @@ const projects = [
     css: {
       gradient: "from-purple-500 to-indigo-500",
       iconColor: "text-purple-400",
-      textGradient: "dark:from-white dark:to-purple-200 from-purple-700 to-purple-900",
       tagHover: "group-hover:border-purple-500/40 group-hover:text-purple-700 dark:group-hover:text-purple-200",
     }
   },
@@ -36,7 +35,6 @@ const projects = [
     css: {
       gradient: "from-cyan-500 to-blue-500",
       iconColor: "text-cyan-400",
-      textGradient: "dark:from-white dark:to-cyan-200 from-cyan-700 to-cyan-900",
       tagHover: "group-hover:border-cyan-500/40 group-hover:text-cyan-700 dark:group-hover:text-cyan-200",
     }
   },
@@ -51,7 +49,6 @@ const projects = [
     css: {
       gradient: "from-amber-500 to-orange-500",
       iconColor: "text-amber-400",
-      textGradient: "dark:from-white dark:to-amber-200 from-amber-700 to-amber-900",
       tagHover: "group-hover:border-amber-500/40 group-hover:text-amber-700 dark:group-hover:text-amber-200",
     }
   },
@@ -83,7 +80,7 @@ const ProjectCard = ({ project, index, activeIndex }) => {
             <div className={`h-1 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
             <span className={`text-xs font-bold tracking-widest uppercase ${project.css.iconColor}`}>Featured Project</span>
           </div>
-          <h3 className={`text-5xl font-black text-gray-900 dark:text-white py-1 transition-all duration-300`}>
+          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1">
             {project.title}
           </h3>
           <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">{project.description}</p>
@@ -127,6 +124,77 @@ const ProjectCard = ({ project, index, activeIndex }) => {
   );
 };
 
+const ArchiveCard = ({ index, activeIndex }) => {
+  const isActive = index === activeIndex;
+
+  return (
+    <div 
+      className={`group relative h-full w-[88%] lg:w-full flex-shrink-0 snap-center snap-always lg:snap-align-none px-3 lg:px-0 transition-all duration-700 ease-in-out 
+        ${!isActive 
+          ? "scale-90 opacity-50 grayscale lg:grayscale-0 lg:opacity-100 lg:scale-100" 
+          : "scale-100 opacity-100 grayscale-0"
+        } lg:!grayscale-0 lg:!scale-100 lg:!opacity-100`}
+    >
+      {/* --- DESKTOP ARCHIVE LAYOUT --- */}
+      <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center px-12">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900 to-black h-[450px] shadow-2xl flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
+          <FaGithub className="text-[180px] text-white/10 absolute -bottom-10 -right-10 rotate-12" />
+          <div className="relative z-10 p-10 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-3xl">
+            <FaGithub className="text-8xl text-white" />
+          </div>
+        </div>
+
+        <div className="flex flex-col space-y-6 text-left">
+          <div className="flex items-center gap-2">
+            <div className="h-1 w-12 bg-gradient-to-r from-gray-500 to-gray-800 dark:from-gray-400 dark:to-white rounded-full"></div>
+            <span className="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400">Public Repositories</span>
+          </div>
+          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1 uppercase">
+            Project Archive
+          </h3>
+          <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
+            Want to see more? Explore my GitHub for early experiments, open-source modules, and the evolution of my code.
+          </p>
+          <div className="flex flex-wrap gap-3">
+             {["Open Source", "Architecture", "Experiments"].map((tag) => (
+              <span key={tag} className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-mono text-gray-700 dark:text-gray-300">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <a href="https://github.com/theRealAbhijithCS" target="_blank" rel="noreferrer" className="px-8 py-4 rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-sm shadow-xl w-fit flex items-center gap-3 mt-4 hover:scale-105 active:scale-95 transition-transform">
+            <FaCodeBranch /> View Full Archive <FaArrowRight />
+          </a>
+        </div>
+      </div>
+
+      {/* --- MOBILE ARCHIVE LAYOUT (MATCHES PROJECT CARDS EXACTLY) --- */}
+      <div className="lg:hidden relative flex flex-col h-full w-full bg-white dark:bg-[#0f172a]/90 rounded-[2.5rem] p-4 shadow-xl border border-gray-100 dark:border-white/10">
+        <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2rem] mb-6 shadow-lg bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+          <FaGithub className="text-[120px] text-white/20 absolute bottom-0 right-0 rotate-12" />
+          <div className="relative z-10 p-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+             <FaGithub className="text-6xl text-white" />
+          </div>
+        </div>
+        <div className="flex flex-col flex-1 px-2 pb-2 text-left">
+          <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Project Archive</h3>
+          <div className="h-1 w-10 bg-gray-400 dark:bg-white/40 rounded-full mb-3"></div>
+          <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 line-clamp-3">
+            Dive into my full repository history. From raw ideas to production-ready tools and experiments.
+          </p>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <span className="px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-white/10 border border-gray-200 dark:border-white/5 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">GitHub</span>
+            <span className="px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-white/10 border border-gray-200 dark:border-white/5 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Open Source</span>
+          </div>
+          <a href="https://github.com/theRealAbhijithCS" target="_blank" rel="noreferrer" className="px-5 py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-xs shadow-lg w-full flex items-center justify-center mt-auto gap-2 uppercase active:scale-95 transition-transform">
+            <FaCodeBranch /> View Archive
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
@@ -134,6 +202,7 @@ export default function Projects() {
   const handleScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, offsetWidth } = scrollRef.current;
+      // Using 0.88 because the card width is 88% on mobile
       const index = Math.round(scrollLeft / (offsetWidth * 0.88));
       if (index !== activeIndex) setActiveIndex(index);
     }
@@ -152,7 +221,6 @@ export default function Projects() {
   return (
     <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-12 sm:py-32 overflow-hidden transition-colors duration-500">
       
-      {/* Background Decor */}
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
       
       <div className="container mx-auto relative z-10">
@@ -172,7 +240,6 @@ export default function Projects() {
               </h2>
             </div>
 
-            {/* --- SWIPE NOTIFICATION (Mobile Only) --- */}
             <div className="lg:hidden inline-flex items-center gap-3 py-2 px-4 rounded-2xl bg-white/50 dark:bg-white/5 border border-black/5 dark:border-white/5 backdrop-blur-md">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
@@ -185,7 +252,7 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* --- CAROUSEL CONTAINER --- */}
+        {/* Carousel Container */}
         <div 
           ref={scrollRef}
           onScroll={handleScroll}
@@ -204,24 +271,20 @@ export default function Projects() {
               activeIndex={activeIndex}
             />
           ))}
+          {/* Archive card as the final slide */}
+          <ArchiveCard index={projects.length} activeIndex={activeIndex} />
         </div>
 
-        {/* Mobile Pagination */}
+        {/* Pagination Dots */}
         <div className="flex lg:hidden gap-3 mt-4 justify-center items-center">
-          {projects.map((_, i) => (
+          {[...Array(projects.length + 1)].map((_, i) => (
             <button 
               key={i} 
               onClick={() => scrollTo(i)} 
               className={`transition-all duration-500 rounded-full ${i === activeIndex ? "w-8 h-1.5 bg-purple-600" : "w-1.5 h-1.5 bg-gray-300"}`} 
+              aria-label={`Go to slide ${i + 1}`}
             />
           ))}
-        </div>
-
-        {/* Footer */}
-        <div className="mt-20 lg:mt-32 pt-10 border-t border-gray-200 dark:border-white/5 flex justify-center px-6">
-          <a href="https://github.com/theRealAbhijithCS" className="px-10 py-5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold flex items-center gap-3 hover:bg-purple-600 dark:hover:bg-purple-500 hover:text-white transition-all shadow-xl">
-            <FaGithub className="text-xl" /> Full Project Archive
-          </a>
         </div>
       </div>
 
