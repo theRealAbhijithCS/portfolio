@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { FaGithub, FaArrowRight, FaRocket, FaExchangeAlt, FaChevronRight, FaCodeBranch } from "react-icons/fa";
+import React, { useRef, useState, useCallback } from "react";
+import { FaGithub, FaArrowRight, FaRocket, FaExchangeAlt, FaCodeBranch } from "react-icons/fa";
 
-// --- Images ---
+// --- Images (Assuming these paths are correct in your project) ---
 import img1 from "../assets/img1.png";
 import img2 from "../assets/img2.png";
 import img3 from "../assets/img3.png";
@@ -54,14 +54,14 @@ const projects = [
   },
 ];
 
-const ProjectCard = ({ project, index, activeIndex }) => {
+const ProjectCard = React.memo(({ project, index, activeIndex }) => {
   const isActive = index === activeIndex;
 
   return (
     <div 
-      className={`group relative h-full w-[88%] lg:w-full flex-shrink-0 snap-center snap-always lg:snap-align-none px-3 lg:px-0 transition-all duration-700 ease-in-out 
+      className={`group relative h-full w-[88%] lg:w-full flex-shrink-0 snap-center snap-always lg:snap-align-none px-3 lg:px-0 transition-all duration-500 ease-out will-change-transform
         ${!isActive 
-          ? "scale-90 opacity-50 grayscale lg:grayscale-0 lg:opacity-100 lg:scale-100" 
+          ? "scale-90 opacity-40 grayscale lg:grayscale-0 lg:opacity-100 lg:scale-100" 
           : "scale-100 opacity-100 grayscale-0"
         } lg:!grayscale-0 lg:!scale-100 lg:!opacity-100`}
     >
@@ -72,7 +72,7 @@ const ProjectCard = ({ project, index, activeIndex }) => {
             <span className={`h-2 w-2 rounded-full animate-ping bg-gradient-to-r ${project.css.gradient}`}></span>
             {project.status}
           </div>
-          <img src={project.desktopParams} alt={project.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <img src={project.desktopParams} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
         </div>
 
         <div className="flex flex-col space-y-6">
@@ -80,9 +80,7 @@ const ProjectCard = ({ project, index, activeIndex }) => {
             <div className={`h-1 w-12 bg-gradient-to-r ${project.css.gradient} rounded-full`}></div>
             <span className={`text-xs font-bold tracking-widest uppercase ${project.css.iconColor}`}>Featured Project</span>
           </div>
-          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1">
-            {project.title}
-          </h3>
+          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1">{project.title}</h3>
           <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">{project.description}</p>
           <div className="flex flex-wrap gap-3">
             {project.tags.map((tag) => (
@@ -100,7 +98,7 @@ const ProjectCard = ({ project, index, activeIndex }) => {
       {/* --- MOBILE LAYOUT --- */}
       <div className="lg:hidden relative flex flex-col h-full w-full bg-white dark:bg-[#0f172a]/90 rounded-[2.5rem] p-4 shadow-xl border border-gray-100 dark:border-white/10">
         <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2rem] mb-6 shadow-lg">
-          <img src={project.mobileParams} alt={project.title} className="w-full h-full object-cover" />
+          <img src={project.mobileParams} alt={project.title} loading="lazy" className="w-full h-full object-cover" />
           <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md text-[10px] font-bold uppercase text-white shadow-sm">
             <span className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${project.css.gradient}`}></span>
             {project.status}
@@ -122,16 +120,16 @@ const ProjectCard = ({ project, index, activeIndex }) => {
       </div>
     </div>
   );
-};
+});
 
-const ArchiveCard = ({ index, activeIndex }) => {
+const ArchiveCard = React.memo(({ index, activeIndex }) => {
   const isActive = index === activeIndex;
 
   return (
     <div 
-      className={`group relative h-full w-[88%] lg:w-full flex-shrink-0 snap-center snap-always lg:snap-align-none px-3 lg:px-0 transition-all duration-700 ease-in-out 
+      className={`group relative h-full w-[88%] lg:w-full flex-shrink-0 snap-center snap-always lg:snap-align-none px-3 lg:px-0 transition-all duration-500 ease-out will-change-transform
         ${!isActive 
-          ? "scale-90 opacity-50 grayscale lg:grayscale-0 lg:opacity-100 lg:scale-100" 
+          ? "scale-90 opacity-40 grayscale lg:grayscale-0 lg:opacity-100 lg:scale-100" 
           : "scale-100 opacity-100 grayscale-0"
         } lg:!grayscale-0 lg:!scale-100 lg:!opacity-100`}
     >
@@ -149,26 +147,17 @@ const ArchiveCard = ({ index, activeIndex }) => {
             <div className="h-1 w-12 bg-gradient-to-r from-gray-500 to-gray-800 dark:from-gray-400 dark:to-white rounded-full"></div>
             <span className="text-xs font-bold tracking-widest uppercase text-gray-500 dark:text-gray-400">Public Repositories</span>
           </div>
-          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1 uppercase">
-            Project Archive
-          </h3>
+          <h3 className="text-5xl font-black text-gray-900 dark:text-white py-1 uppercase">Project Archive</h3>
           <p className="text-lg leading-relaxed text-gray-600 dark:text-gray-400">
-            Want to see more? Explore my GitHub for early experiments, open-source modules, and the evolution of my code.
+            Want to see more? Explore my GitHub for early experiments and open-source modules.
           </p>
-          <div className="flex flex-wrap gap-3">
-             {["Open Source", "Architecture", "Experiments"].map((tag) => (
-              <span key={tag} className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-mono text-gray-700 dark:text-gray-300">
-                {tag}
-              </span>
-            ))}
-          </div>
           <a href="https://github.com/theRealAbhijithCS" target="_blank" rel="noreferrer" className="px-8 py-4 rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-sm shadow-xl w-fit flex items-center gap-3 mt-4 hover:scale-105 active:scale-95 transition-transform">
             <FaCodeBranch /> View Full Archive <FaArrowRight />
           </a>
         </div>
       </div>
 
-      {/* --- MOBILE ARCHIVE LAYOUT (MATCHES PROJECT CARDS EXACTLY) --- */}
+      {/* --- MOBILE ARCHIVE LAYOUT --- */}
       <div className="lg:hidden relative flex flex-col h-full w-full bg-white dark:bg-[#0f172a]/90 rounded-[2.5rem] p-4 shadow-xl border border-gray-100 dark:border-white/10">
         <div className="relative w-full aspect-[4/5] overflow-hidden rounded-[2rem] mb-6 shadow-lg bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
           <FaGithub className="text-[120px] text-white/20 absolute bottom-0 right-0 rotate-12" />
@@ -180,12 +169,8 @@ const ArchiveCard = ({ index, activeIndex }) => {
           <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-1">Project Archive</h3>
           <div className="h-1 w-10 bg-gray-400 dark:bg-white/40 rounded-full mb-3"></div>
           <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 line-clamp-3">
-            Dive into my full repository history. From raw ideas to production-ready tools and experiments.
+            Dive into my full repository history. From raw ideas to production-ready tools.
           </p>
-          <div className="flex flex-wrap gap-2 mb-6">
-            <span className="px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-white/10 border border-gray-200 dark:border-white/5 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">GitHub</span>
-            <span className="px-2.5 py-1 rounded-lg bg-gray-50 dark:bg-white/10 border border-gray-200 dark:border-white/5 text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Open Source</span>
-          </div>
           <a href="https://github.com/theRealAbhijithCS" target="_blank" rel="noreferrer" className="px-5 py-4 rounded-2xl bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-xs shadow-lg w-full flex items-center justify-center mt-auto gap-2 uppercase active:scale-95 transition-transform">
             <FaCodeBranch /> View Archive
           </a>
@@ -193,26 +178,36 @@ const ArchiveCard = ({ index, activeIndex }) => {
       </div>
     </div>
   );
-};
+});
 
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
+  const throttleRef = useRef(false);
 
-  const handleScroll = () => {
-    if (scrollRef.current) {
+  // Optimized Scroll Handler with Throttling
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current || throttleRef.current) return;
+
+    throttleRef.current = true;
+    setTimeout(() => {
       const { scrollLeft, offsetWidth } = scrollRef.current;
-      // Using 0.88 because the card width is 88% on mobile
-      const index = Math.round(scrollLeft / (offsetWidth * 0.88));
-      if (index !== activeIndex) setActiveIndex(index);
-    }
-  };
+      // Using clientWidth of the first child for more accurate indexing
+      const cardWidth = offsetWidth * 0.88; 
+      const index = Math.round(scrollLeft / cardWidth);
+      
+      if (index !== activeIndex) {
+        setActiveIndex(index);
+      }
+      throttleRef.current = false;
+    }, 100); // Only check index every 100ms
+  }, [activeIndex]);
 
   const scrollTo = (index) => {
     if (scrollRef.current) {
-      const width = scrollRef.current.offsetWidth * 0.88;
+      const cardWidth = scrollRef.current.offsetWidth * 0.88;
       scrollRef.current.scrollTo({
-        left: width * index,
+        left: cardWidth * index,
         behavior: "smooth"
       });
     }
@@ -220,11 +215,9 @@ export default function Projects() {
 
   return (
     <section id="projects" className="relative bg-gray-50 dark:bg-[#020617] py-12 sm:py-32 overflow-hidden transition-colors duration-500">
-      
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
       
       <div className="container mx-auto relative z-10">
-        {/* Header */}
         <div className="mb-12 lg:mb-24 max-w-4xl px-6 lg:px-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
@@ -252,16 +245,10 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Carousel Container */}
         <div 
           ref={scrollRef}
           onScroll={handleScroll}
           className="flex lg:flex-col lg:space-y-48 overflow-x-auto lg:overflow-x-visible snap-x snap-mandatory no-scrollbar scroll-smooth px-[6%] lg:px-0 pb-12"
-          style={{ 
-            scrollbarWidth: 'none', 
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch' 
-          }}
         >
           {projects.map((project, index) => (
             <ProjectCard 
@@ -271,11 +258,9 @@ export default function Projects() {
               activeIndex={activeIndex}
             />
           ))}
-          {/* Archive card as the final slide */}
           <ArchiveCard index={projects.length} activeIndex={activeIndex} />
         </div>
 
-        {/* Pagination Dots */}
         <div className="flex lg:hidden gap-3 mt-4 justify-center items-center">
           {[...Array(projects.length + 1)].map((_, i) => (
             <button 
@@ -289,12 +274,9 @@ export default function Projects() {
       </div>
 
       <style jsx>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .snap-always {
-          scroll-snap-stop: always;
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .snap-always { scroll-snap-stop: always; }
       `}</style>
     </section>
   );
