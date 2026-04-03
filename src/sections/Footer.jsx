@@ -11,8 +11,8 @@ import {
 
 const socials = [
 
-  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/abhijith-c-s-440950286/" },
-  { Icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/_abhijith_cs/" },
+  { Icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/" },
+  { Icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/" },
   { Icon: FaGithub, label: "GitHub", href: "https://github.com/theRealAbhijithCS" },
 ];
 
